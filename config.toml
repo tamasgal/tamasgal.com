@@ -1,12 +1,12 @@
-baseurl = "https://pages.gitlab.io/hugo/"
+baseurl = "https://tgal.pages.km3net.de/blog"
 contentdir    = "content"
 layoutdir     = "layouts"
 publishdir    = "public"
-title = "Beautiful Hugo"
+title = "Tamas Gal"
 canonifyurls  = true
 
 DefaultContentLanguage = "en"
-theme = "beautifulhugo"
+theme = "hugo-xmin"
 metaDataFormat = "yaml"
 pygmentsUseClasses = true
 pygmentCodeFences = true
