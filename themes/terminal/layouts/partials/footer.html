@@ -1,4 +1,14 @@
 <footer class="footer">
+  <div class="footer__tags">
+      <h4>Tags</h4>
+      <ul>
+        {{ range $.Site.Taxonomies.tags.ByCount }}
+          <li>
+              <a href="{{ $.Site.BaseURL }}tags/{{ .Name }}"> {{ .Name }} <small class="tag_count">{{ .Count }}</small></a>
+          </li>
+        {{end}}
+      </ul>
+  </div>
   <div class="footer__inner">
     {{ if $.Site.Copyright }}
       <div class="copyright copyright--user">{{ $.Site.Copyright | safeHTML }}</div>

@@ -1,0 +1,8 @@
+.footer__tags ul li {
+    display: inline-block;
+}
+
+.footer__tags .tag_count {
+    vertical-align: super;
+    font-size: 50%;
+}

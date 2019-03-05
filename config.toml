@@ -3,6 +3,10 @@ languageCode = "en-us"
 theme = "terminal"
 paginate = 15
 
+[taxonomies]
+   tag = "tags"
+   category = "categories"
+
 [params]
   contentTypeName = "post"
   themeColor = "red"
