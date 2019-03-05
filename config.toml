@@ -1,4 +1,15 @@
+baseurl = "https://tgal.pages.km3net.de/blog"
+contentdir    = "content"
+layoutdir     = "layouts"
+publishdir    = "public"
+title = "Tamas Gal"
+canonifyurls  = true
+
+DefaultContentLanguage = "en"
 theme = "hugo-xmin"
+metaDataFormat = "yaml"
+pygmentsUseClasses = true
+pygmentCodeFences = true
 
 name = "XMin"
 license = "MIT"
