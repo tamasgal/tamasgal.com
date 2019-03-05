@@ -4,7 +4,7 @@
       <ul>
         {{ range $.Site.Taxonomies.tags.ByCount }}
           <li>
-              <a href="{{ $.Site.BaseURL }}tags/{{ .Name }}"> {{ .Name }} <small class="tag_count">{{ .Count }}</small></a>
+              <a href="{{ $.Site.BaseURL }}/tags/{{ .Name }}"> {{ .Name }} <small class="tag_count">{{ .Count }}</small></a>
           </li>
         {{end}}
       </ul>
