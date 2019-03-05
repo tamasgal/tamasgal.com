@@ -1,19 +1,19 @@
 baseurl = "https://tgal.pages.km3net.de/blog"
 languageCode = "en-us"
 theme = "terminal"
-paginate = 5
+paginate = 15
 
 [params]
   contentTypeName = "post"
-  themeColor = "orange"
+  themeColor = "red"
   showMenuItems = 2
   fullWidthTheme = false
   centerTheme = false
 
 [languages]
   [languages.en]
-    title = "Terminal"
-    subtitle = "A simple, retro theme for Hugo"
+    title = "Tamás Gál | blog"
+    subtitle = "This is a collection of thoughts worth to be published. IMO"
     keywords = ""
     copyright = ""
     menuMore = "Show more"
