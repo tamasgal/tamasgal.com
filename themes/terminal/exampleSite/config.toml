@@ -1,22 +1,21 @@
-baseurl = "/"
+baseurl = "https://example.com/"
 languageCode = "en-us"
-theme = "terminal"
+theme = "hugo-theme-terminal"
 paginate = 5
 
 [params]
-  # dir name of your blog content (default is `content/posts`)
-  contentTypeName = "posts"
-  # ["orange", "blue", "red", "green", "pink"]
-  themeColor = "pink"
-  # if you set this to 0, only submenu trigger will be visible
+  contentTypeName = "post"
+  themeColor = "orange"
   showMenuItems = 2
+  fullWidthTheme = false
+  centerTheme = false
 
 [languages]
   [languages.en]
-    title = "The ..."
-    subtitle = "Tamás Gál"
+    title = "Terminal"
+    subtitle = "A simple, retro theme for Hugo"
     keywords = ""
-    copyright = "Tamás Gál"
+    copyright = ""
     menuMore = "Show more"
     readMore = "Read more"
     readOtherPosts = "Read other posts"
