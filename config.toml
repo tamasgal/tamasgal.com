@@ -1,4 +1,4 @@
-baseurl = "https://example.com/"
+baseurl = "https://tgal.pages.km3net.de/blog"
 languageCode = "en-us"
 theme = "terminal"
 paginate = 5
