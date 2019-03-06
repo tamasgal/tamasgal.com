@@ -1,6 +1,6 @@
 +++
 title = "Data Exchange Between Python and C++ via protobuf"
-date = "2019-03-06"
+date = "2014-03-22"
 author = "Tamás Gál"
 cover = ""
 description = "An example how to use Googles protobuf to send a data structure from a C++ script to a Python script via UDP."
