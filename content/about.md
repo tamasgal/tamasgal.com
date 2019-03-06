@@ -2,6 +2,7 @@
 title = "About"
 date = "2019-03-05"
 author = "Tamas Gal"
+cover = "img/tamasgal.jpg"
 +++
 
 # Servus
