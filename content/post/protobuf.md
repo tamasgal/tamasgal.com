@@ -20,9 +20,9 @@ pip install protobuf
 
 Then I defined a very simple data structure using the proto-syntax:
 
-### Filename: foo.proto
-
 ```C++
+// Filename: foo.proto
+
 package prototest;
 
 message Foo {
@@ -51,9 +51,10 @@ Python code:
 Let’s have a look at the very basic `C++` code, which is meant to send an
 instance of `foo` over the network, using UDP (to localhost on port 5555):
 
-### Filename: send.cc
 
 ```C++
+// Filename: send.cc
+
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
@@ -96,9 +97,10 @@ And finally, this is the `Python` code, which waits for UDP packets and
 deserialise them into `foo`. Again: no error checking whatsoever, this is
 only to demonstrate the functionality:
 
-### Filename: receive.py
 
 ```Python
+# Filename: receive.py
+
 import socket
 from foo_pb2 import Foo
 
