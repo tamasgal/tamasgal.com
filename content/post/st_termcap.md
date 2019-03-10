@@ -5,7 +5,7 @@ author = "Tamás Gál"
 cover = ""
 description = "A code snippet to transfer the terminfo to another server"
 categories = ["terminal"]
-tags = ["st","terminal", "ssh"]
+tags = ["st","terminal", "ssh","suckless"]
 +++
 
 ## Symptoms
