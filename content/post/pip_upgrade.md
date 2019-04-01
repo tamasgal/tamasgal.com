@@ -4,7 +4,7 @@ date = "2019-03-15"
 author = "Tamás Gál"
 cover = ""
 description = "A one-liner to update all pip packages"
-categories = ["terminal"]
+categories = ["python"]
 tags = ["pip","python", "one-liner"]
 +++
 
