@@ -17,3 +17,10 @@ Update all packages which are managed by `pip`.
 ```shell
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 ```
+
+## Alternatively
+
+```shell
+pip freeze|grep '=='|awk -F= '{print $1}' | xargs pip install -U
+```
+
