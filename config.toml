@@ -1,4 +1,4 @@
-baseurl = "http://tamasgal.com/blog/"
+baseurl = "http://tamasgal.com/"
 relativeurls = false
 
 languageCode = "en-us"
@@ -21,6 +21,11 @@ pygmentsCodeFences = true
     name = "Home"
     pre = "home"
     url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "macOS"
+    pre = "monitor"
+    url = "/mac/"
     weight = 1
   [[menu.main]]
     name = "Blog"
