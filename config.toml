@@ -3,7 +3,7 @@ relativeurls = false
 
 languageCode = "en-us"
 title = "Tamás Gál"
-disqusShortname = "tmsgl"
+disqusShortname = "tamasgal"
 
 pygmentsUseClasses = true
 pygmentsCodeFences = true 
