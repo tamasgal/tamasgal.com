@@ -1,5 +1,5 @@
-baseurl = ""
-relativeurls = true
+baseurl = "http://tamasgal.com/blog/"
+relativeurls = false
 
 languageCode = "en-us"
 title = "Tamás Gál"
