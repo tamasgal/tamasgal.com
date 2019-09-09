@@ -33,6 +33,11 @@ pygmentsCodeFences = true
     url = "/mac/"
     weight = 3
   [[menu.main]]
+    name = "Physics"
+    pre = "monitor"
+    url = "/physics/"
+    weight = 4
+  [[menu.main]]
     name = "Tetris"
     pre = "grid"
     url = "/tetris/"
@@ -48,9 +53,14 @@ pygmentsCodeFences = true
     url = "/tags/"
     weight = 6
   [[menu.main]]
-    name = "  "
+    name = "GitHub"
     pre = "github"
     url = "https://github.com/tamasgal"
+    weight = 9
+  [[menu.main]]
+    name = "Twitter"
+    pre = "twitter"
+    url = "https://twitter.com/tamasgal"
     weight = 9
 
 [params]
