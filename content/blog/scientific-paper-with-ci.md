@@ -5,4 +5,6 @@ tags: [science, papers, phd, thesis, CI, tex, makefile, julia, drwatson, pgfplot
 draft: true
 ---
 
-
+The following setup will give you a fully automatised workflow to generate your
+scientific paper using continuous integration (CI) based on GitLab CI (easily
+transferable to GitHub/Travis/Jenkins/YouNameIt). 
