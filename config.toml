@@ -58,6 +58,11 @@ pygmentsCodeFences = true
     url = "https://github.com/tamasgal"
     weight = 9
   [[menu.main]]
+    name = "YouTube"
+    pre = "youtube"
+    url = "https://www.youtube.com/c/tamasgal_com"
+    weight = 9
+  [[menu.main]]
     name = "Twitter"
     pre = "twitter"
     url = "https://twitter.com/tamasgal"
