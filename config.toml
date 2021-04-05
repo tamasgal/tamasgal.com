@@ -32,11 +32,11 @@ pygmentsCodeFences = true
     pre = "monitor"
     url = "/mac/"
     weight = 3
-  [[menu.main]]
-    name = "Physics"
-    pre = "monitor"
-    url = "/physics/"
-    weight = 4
+#  [[menu.main]]
+#    name = "Physics"
+#    pre = "monitor"
+#    url = "/physics/"
+#    weight = 4
   [[menu.main]]
     name = "Tetris"
     pre = "grid"
