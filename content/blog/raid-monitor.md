@@ -1,13 +1,12 @@
 ---
-title: "Raid Monitor"
+title: "RAID Monitor for LSI/3Ware MegaRAID controllers"
 date: 2021-04-05T22:17:41+02:00
 tags: ["devops", "python", "sysadmin"]
 draft: false
 ---
 
-# RAID Monitor (for 3Ware/LSI MegaRAID)
-
-I still manage a few old servers with 3Ware/LSI MegaRAID controllers and wrote
+I still manage a few old servers with 3Ware/LSI MegaRAID controllers (e.g. the 9650SE)
+and wrote
 the following Python3 script which is sitting in `/etc/cron.daily` and sends
 and email if there is any problem with the battery, disks or units.
 Keep in mind that scripts inside the `/etc/cron.*` folders are not allowed
@@ -17,7 +16,7 @@ If you don't have a working mail configuration, I recommend `exim4` which is
 easily set up in a few minutes with standard settings.
 
 Here is the script, make sure to change the `TW_CLI_CMD`, `CONTROLLER` and
-`ALERT_MAIL` and of course feel free to (copy transform and combine)[https://www.youtube.com/watch?v=nJPERZDfyWc].
+`ALERT_MAIL` and of course feel free to [copy transform and combine](https://www.youtube.com/watch?v=nJPERZDfyWc).
 
 ```python
 #!/usr/bin/env python3
