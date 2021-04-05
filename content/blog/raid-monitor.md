@@ -35,7 +35,7 @@ import subprocess
 
 TW_CLI_CMD = "/usr/sbin/tw_cli"
 CONTROLLER = "c0"
-ALERT_MAIL = "physik-ecapadmins-logs@lists.fau.de"
+ALERT_MAIL = "..."
 
 
 def check_units(stdout):
