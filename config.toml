@@ -29,9 +29,14 @@ pygmentsCodeFences = true
     weight = 2
   [[menu.main]]
     name = "macOS"
-    pre = "monitor"
+    pre = "command"
     url = "/mac/"
     weight = 3
+ [[menu.main]]
+   name = "Modular Synths"
+   pre = "speaker"
+   url = "/modular_synths/"
+   weight = 4
 #  [[menu.main]]
 #    name = "Physics"
 #    pre = "monitor"
