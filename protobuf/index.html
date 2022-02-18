@@ -1,0 +1,138 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=generator content="Hugo 0.92.2">
+<link rel=stylesheet href=http://tamasgal.com/css/bootstrap.min.css>
+<link rel=stylesheet href=http://tamasgal.com/css/syntax.css>
+<title>Data Exchange Between Python and C++ via protobuf | Tamás Gál</title>
+<style>.container{max-width:700px}#nav a{font-weight:700;color:inherit}#nav-border{border-bottom:1px solid #212529}#main{margin-top:1em;margin-bottom:4em}#home-jumbotron{background-color:inherit}.font-125{font-size:125%}.tag-btn{margin-bottom:.3em}img{max-width:100%}#profile{width:200px;-webkit-clip-path:circle(100px at center);clip-path:circle(100px at center)}pre.chroma{padding:1em;font-size:70%}pre{padding:1em;font-size:70%;border-left:.5em solid lightgrey}#disqus-container{text-align:center}#disqus-button{width:100%;padding:.25em .75em}#disqus-comments{display:none}</style>
+</head>
+<body>
+<div id=nav-border class=container>
+<nav id=nav class="nav justify-content-center">
+<a class=nav-link href=/><i data-feather=home></i> </a>
+<a class=nav-link href=/blog/><i data-feather=edit></i> Blog</a>
+<a class=nav-link href=/mac/><i data-feather=monitor></i> macOS</a>
+<a class=nav-link href=/tetris/><i data-feather=grid></i> Tetris</a>
+<a class=nav-link href=/groooo/><i data-feather=circle></i> Groooo</a>
+<a class=nav-link href=/tags/><i data-feather=tag></i> Tags</a>
+<a class=nav-link href=https://github.com/tamasgal><i data-feather=github></i> GitHub</a>
+<a class=nav-link href=https://twitter.com/tamasgal><i data-feather=twitter></i> Twitter</a>
+<a class=nav-link href=https://www.youtube.com/c/tamasgal_com><i data-feather=youtube></i> YouTube</a>
+</nav>
+</div>
+<div class=container>
+<main id=main>
+<h1>Data Exchange Between Python and C++ via protobuf</h1>
+<i data-feather=calendar></i> <time datetime=2014-03-22>2014-03-22</time>
+<br>
+<i data-feather=tag></i>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/protobuf>protobuf</a>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/python>python</a>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/c++>c++</a>
+<br><br>
+<h1 id=installing-protobuf>Installing protobuf</h1>
+<p>The first step is of course installing the <code>protobuf</code> library. I used
+homebrew for the main library and <code>pip</code> to install the <code>Python</code> modules:</p>
+<pre tabindex=0><code>brew install protobuf
+pip install protobuf
+</code></pre><p>Then I defined a very simple data structure using the proto-syntax:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=c1>// Filename: foo.proto
+</span><span class=c1></span>
+<span class=n>package</span> <span class=n>prototest</span><span class=p>;</span>
+
+<span class=n>message</span> <span class=n>Foo</span> <span class=p>{</span>
+    <span class=n>required</span> <span class=n>int32</span> <span class=n>id</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span>
+    <span class=n>required</span> <span class=n>string</span> <span class=n>bar</span> <span class=o>=</span> <span class=mi>2</span><span class=p>;</span>
+    <span class=n>optional</span> <span class=n>string</span> <span class=n>baz</span> <span class=o>=</span> <span class=mi>3</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>This proto-file can now be translated into C++ and Python classes via:</p>
+<pre tabindex=0><code>protoc foo.proto –cpp_out=. –python_out=.
+</code></pre><p>The folder should now contain the C++ header and source files and the
+Python code:</p>
+<pre tabindex=0><code>├── foo.pb.cc
+├── foo.pb.h
+├── foo.proto
+└── foo_pb2.py
+</code></pre><p>Let’s have a look at the very basic <code>C++</code> code, which is meant to send an
+instance of <code>foo</code> over the network, using UDP (to localhost on port 5555):</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=c1>// Filename: send.cc
+</span><span class=c1></span>
+<span class=cp>#include</span> <span class=cpf>&lt;sys/socket.h&gt;</span><span class=cp>
+</span><span class=cp>#include</span> <span class=cpf>&lt;arpa/inet.h&gt;</span><span class=cp>
+</span><span class=cp></span>
+<span class=c1>// this is our proto of foo
+</span><span class=c1></span><span class=cp>#include</span> <span class=cpf>&#34;foo.pb.h&#34;</span><span class=cp>
+</span><span class=cp></span>
+<span class=kt>int</span> <span class=nf>main</span><span class=p>(</span><span class=kt>int</span> <span class=n>argc</span><span class=p>,</span> <span class=kt>char</span> <span class=o>**</span><span class=n>argv</span><span class=p>)</span>
+<span class=p>{</span>
+    <span class=k>struct</span> <span class=nc>sockaddr_in</span> <span class=n>addr</span><span class=p>;</span>
+
+    <span class=n>addr</span><span class=p>.</span><span class=n>sin_family</span> <span class=o>=</span> <span class=n>AF_INET</span><span class=p>;</span>
+    <span class=n>inet_aton</span><span class=p>(</span><span class=s>&#34;127.0.0.1&#34;</span><span class=p>,</span> <span class=o>&amp;</span><span class=n>addr</span><span class=p>.</span><span class=n>sin_addr</span><span class=p>);</span>
+    <span class=n>addr</span><span class=p>.</span><span class=n>sin_port</span> <span class=o>=</span> <span class=n>htons</span><span class=p>(</span><span class=mi>5555</span><span class=p>);</span>
+
+    <span class=c1>// initialise a foo and set some properties
+</span><span class=c1></span>    <span class=n>GOOGLE_PROTOBUF_VERIFY_VERSION</span><span class=p>;</span>
+    <span class=n>prototest</span><span class=o>::</span><span class=n>Foo</span> <span class=n>foo</span><span class=p>;</span>
+    <span class=n>foo</span><span class=p>.</span><span class=n>set_id</span><span class=p>(</span><span class=mi>4</span><span class=p>);</span>
+    <span class=n>foo</span><span class=p>.</span><span class=n>set_bar</span><span class=p>(</span><span class=s>&#34;narf&#34;</span><span class=p>);</span>
+
+    <span class=c1>// serialise to string, this one is obvious ; )
+</span><span class=c1></span>    <span class=n>std</span><span class=o>::</span><span class=n>string</span> <span class=n>buf</span><span class=p>;</span>
+    <span class=n>foo</span><span class=p>.</span><span class=n>SerializeToString</span><span class=p>(</span><span class=o>&amp;</span><span class=n>buf</span><span class=p>);</span>
+
+    <span class=kt>int</span> <span class=n>sock</span> <span class=o>=</span> <span class=n>socket</span><span class=p>(</span><span class=n>PF_INET</span><span class=p>,</span> <span class=n>SOCK_DGRAM</span><span class=p>,</span> <span class=mi>0</span><span class=p>);</span>
+    <span class=n>sendto</span><span class=p>(</span><span class=n>sock</span><span class=p>,</span> <span class=n>buf</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>strlen</span><span class=p>(</span><span class=n>buf</span><span class=p>.</span><span class=n>c_str</span><span class=p>()),</span> <span class=mi>0</span><span class=p>,</span>
+           <span class=p>(</span><span class=k>struct</span> <span class=nc>sockaddr</span> <span class=o>*</span><span class=p>)</span><span class=o>&amp;</span><span class=n>addr</span><span class=p>,</span> <span class=k>sizeof</span><span class=p>(</span><span class=n>addr</span><span class=p>));</span>
+
+    <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+<span class=p>}</span>
+</code></pre></div><p>I compiled it via <code>clang++</code>:</p>
+<pre tabindex=0><code>clang++ -o send send.cc foo.pb.cc -lprotobuf
+</code></pre><p>And finally, this is the <code>Python</code> code, which waits for UDP packets and
+deserialise them into <code>foo</code>. Again: no error checking whatsoever, this is
+only to demonstrate the functionality:</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=c1># Filename: receive.py</span>
+
+<span class=kn>import</span> <span class=nn>socket</span>
+<span class=kn>from</span> <span class=nn>foo_pb2</span> <span class=kn>import</span> <span class=n>Foo</span>
+
+<span class=n>sock</span> <span class=o>=</span> <span class=n>socket</span><span class=o>.</span><span class=n>socket</span><span class=p>(</span><span class=n>socket</span><span class=o>.</span><span class=n>AF_INET</span><span class=p>,</span> <span class=n>socket</span><span class=o>.</span><span class=n>SOCK_DGRAM</span><span class=p>)</span>
+<span class=n>sock</span><span class=o>.</span><span class=n>bind</span><span class=p>((</span><span class=s2>&#34;127.0.0.1&#34;</span><span class=p>,</span> <span class=mi>5555</span><span class=p>))</span>
+
+<span class=n>foo</span> <span class=o>=</span> <span class=n>Foo</span><span class=p>()</span>
+<span class=k>while</span> <span class=kc>True</span><span class=p>:</span>
+    <span class=n>data</span><span class=p>,</span> <span class=n>addr</span> <span class=o>=</span> <span class=n>sock</span><span class=o>.</span><span class=n>recvfrom</span><span class=p>(</span><span class=mi>1024</span><span class=p>)</span>
+    <span class=n>foo</span><span class=o>.</span><span class=n>ParseFromString</span><span class=p>(</span><span class=n>data</span><span class=p>)</span>
+    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;Got foo with id=</span><span class=si>{0}</span><span class=s2> and bar=</span><span class=si>{1}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>foo</span><span class=o>.</span><span class=n>id</span><span class=p>,</span> <span class=n>foo</span><span class=o>.</span><span class=n>bar</span><span class=p>))</span>
+</code></pre></div><p>Now we’re done and this is the final directory structure:</p>
+<pre tabindex=0><code>├── foo.pb.cc
+├── foo.pb.h
+├── foo.proto
+├── foo_pb2.py
+├── receive.py
+├── send
+└── send.cc
+</code></pre><p>To test the script, simply run <code>receive.py</code> to listen to UDP packets via</p>
+<pre tabindex=0><code>python receive.py
+</code></pre><p>and keep your eyes on the output when you execute the C++ generated <code>send</code>
+script:</p>
+<pre tabindex=0><code>./send
+</code></pre>
+<div id=disqus-container>
+<button id=disqus-button onclick=showComments()>Show comments</button>
+<div id=disqus-comments>
+<div id=disqus_thread>
+</div>
+<script type=application/javascript>function showComments(){var e=function(){},b=document,a=b.createElement('script'),c,d;a.async=!0,a.src='//tamasgal.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a),c=document.getElementById('disqus-button'),c.parentNode.removeChild(c),d=document.getElementById('disqus-comments'),d.style.display='block'}</script>
+<noscript>Enable JavaScript to view Disqus comments.</noscript>
+</div>
+</div>
+</main>
+</div>
+<script src=http://tamasgal.com/js/feather.min.js></script>
+<script>feather.replace()</script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!doctype html><html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<meta name=generator content="Hugo 0.92.2">
+<link rel=stylesheet href=http://tamasgal.com/css/bootstrap.min.css>
+<link rel=stylesheet href=http://tamasgal.com/css/syntax.css>
+<title>RAID Monitor for LSI/3Ware MegaRAID controllers | Tamás Gál</title>
+<style>.container{max-width:700px}#nav a{font-weight:700;color:inherit}#nav-border{border-bottom:1px solid #212529}#main{margin-top:1em;margin-bottom:4em}#home-jumbotron{background-color:inherit}.font-125{font-size:125%}.tag-btn{margin-bottom:.3em}img{max-width:100%}#profile{width:200px;-webkit-clip-path:circle(100px at center);clip-path:circle(100px at center)}pre.chroma{padding:1em;font-size:70%}pre{padding:1em;font-size:70%;border-left:.5em solid lightgrey}#disqus-container{text-align:center}#disqus-button{width:100%;padding:.25em .75em}#disqus-comments{display:none}</style>
+</head>
+<body>
+<div id=nav-border class=container>
+<nav id=nav class="nav justify-content-center">
+<a class=nav-link href=/><i data-feather=home></i> </a>
+<a class=nav-link href=/blog/><i data-feather=edit></i> Blog</a>
+<a class=nav-link href=/mac/><i data-feather=monitor></i> macOS</a>
+<a class=nav-link href=/tetris/><i data-feather=grid></i> Tetris</a>
+<a class=nav-link href=/groooo/><i data-feather=circle></i> Groooo</a>
+<a class=nav-link href=/tags/><i data-feather=tag></i> Tags</a>
+<a class=nav-link href=https://github.com/tamasgal><i data-feather=github></i> GitHub</a>
+<a class=nav-link href=https://twitter.com/tamasgal><i data-feather=twitter></i> Twitter</a>
+<a class=nav-link href=https://www.youtube.com/c/tamasgal_com><i data-feather=youtube></i> YouTube</a>
+</nav>
+</div>
+<div class=container>
+<main id=main>
+<h1>RAID Monitor for LSI/3Ware MegaRAID controllers</h1>
+<i data-feather=calendar></i> <time datetime=2021-04-05>2021-04-05</time>
+<br>
+<i data-feather=tag></i>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/devops>devops</a>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/python>python</a>
+<a class="btn btn-sm btn-outline-dark tag-btn" href=http://tamasgal.com/tags/sysadmin>sysadmin</a>
+<br><br>
+<p>I still manage a few old servers with 3Ware/LSI MegaRAID controllers (e.g. the 9650SE)
+and wrote
+the following Python3 script which is sitting in <code>/etc/cron.daily</code> and sends
+and email if there is any problem with the battery, disks or units.
+Keep in mind that scripts inside the <code>/etc/cron.*</code> folders are not allowed
+to have a dot in the filename, otherwise those will be ignored.</p>
+<p>If you don&rsquo;t have a working mail configuration, I recommend <code>exim4</code> which is
+easily set up in a few minutes with standard settings.</p>
+<p>Here is the script, make sure to change the <code>TW_CLI_CMD</code>, <code>CONTROLLER</code> and
+<code>ALERT_MAIL</code> and of course feel free to <a href="https://www.youtube.com/watch?v=nJPERZDfyWc">copy transform and combine</a>.</p>
+<div class=highlight><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=ch>#!/usr/bin/env python3</span>
+<span class=s2>&#34;&#34;&#34;
+</span><span class=s2>Monitoring and mail alert for LSI/3Ware RAID systems, like the 9650SE.
+</span><span class=s2>
+</span><span class=s2>Author: Tamas Gal
+</span><span class=s2>Email: tamas.gal@fau.de
+</span><span class=s2>Date: 2021-03-25
+</span><span class=s2>
+</span><span class=s2>&#34;&#34;&#34;</span>
+<span class=kn>import</span> <span class=nn>re</span>
+<span class=kn>import</span> <span class=nn>smtplib</span>
+<span class=kn>import</span> <span class=nn>socket</span>
+<span class=kn>import</span> <span class=nn>subprocess</span>
+
+<span class=n>TW_CLI_CMD</span> <span class=o>=</span> <span class=s2>&#34;/usr/sbin/tw_cli&#34;</span>
+<span class=n>CONTROLLER</span> <span class=o>=</span> <span class=s2>&#34;c0&#34;</span>
+<span class=n>ALERT_MAIL</span> <span class=o>=</span> <span class=s2>&#34;...&#34;</span>
+
+
+<span class=k>def</span> <span class=nf>check_units</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;Check all RAID units and return True if they are OK&#34;&#34;&#34;</span>
+    <span class=n>units_status</span> <span class=o>=</span> <span class=n>re</span><span class=o>.</span><span class=n>search</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;\nu\d+\s+[^ ]+\s+([^ ]+)&#39;</span><span class=p>,</span> <span class=n>stdout</span><span class=p>)</span><span class=o>.</span><span class=n>groups</span><span class=p>()</span>
+    <span class=k>return</span> <span class=nb>all</span><span class=p>(</span><span class=n>s</span> <span class=o>==</span> <span class=s2>&#34;OK&#34;</span> <span class=k>for</span> <span class=n>s</span> <span class=ow>in</span> <span class=n>units_status</span><span class=p>)</span>
+
+
+<span class=k>def</span> <span class=nf>check_disks</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;Check all disks and return True if they are OK&#34;&#34;&#34;</span>
+    <span class=n>disks_status</span> <span class=o>=</span> <span class=n>re</span><span class=o>.</span><span class=n>search</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;\np\d+\s+([^ ]+)&#39;</span><span class=p>,</span> <span class=n>stdout</span><span class=p>)</span><span class=o>.</span><span class=n>groups</span><span class=p>()</span>
+    <span class=k>return</span> <span class=nb>all</span><span class=p>(</span><span class=n>s</span> <span class=o>==</span> <span class=s2>&#34;OK&#34;</span> <span class=k>for</span> <span class=n>s</span> <span class=ow>in</span> <span class=n>disks_status</span><span class=p>)</span>
+
+
+<span class=k>def</span> <span class=nf>check_battery</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+    <span class=s2>&#34;&#34;&#34;Check the battery and return True if it&#39;s OK&#34;&#34;&#34;</span>
+    <span class=n>battery_status</span> <span class=o>=</span> <span class=n>re</span><span class=o>.</span><span class=n>search</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;\nbbu\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)\s+([^\s]+)&#39;</span><span class=p>,</span> <span class=n>stdout</span><span class=p>)</span><span class=o>.</span><span class=n>groups</span><span class=p>()</span>
+    <span class=k>return</span> <span class=n>battery_status</span> <span class=o>==</span> <span class=p>(</span><span class=s1>&#39;On&#39;</span><span class=p>,</span> <span class=s1>&#39;Yes&#39;</span><span class=p>,</span> <span class=s1>&#39;OK&#39;</span><span class=p>,</span> <span class=s1>&#39;OK&#39;</span><span class=p>,</span> <span class=s1>&#39;OK&#39;</span><span class=p>)</span>
+
+
+<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+
+    <span class=n>process</span> <span class=o>=</span> <span class=n>subprocess</span><span class=o>.</span><span class=n>Popen</span><span class=p>(</span>
+        <span class=p>[</span><span class=n>TW_CLI_CMD</span><span class=p>,</span> <span class=sa>f</span><span class=s2>&#34;/</span><span class=si>{</span><span class=n>CONTROLLER</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>,</span> <span class=s2>&#34;show&#34;</span><span class=p>],</span>
+        <span class=n>stdout</span><span class=o>=</span><span class=n>subprocess</span><span class=o>.</span><span class=n>PIPE</span><span class=p>,</span>
+        <span class=n>stderr</span><span class=o>=</span><span class=n>subprocess</span><span class=o>.</span><span class=n>PIPE</span><span class=p>)</span>
+
+    <span class=n>stdout</span><span class=p>,</span> <span class=n>stderr</span> <span class=o>=</span> <span class=p>[</span><span class=n>s</span><span class=o>.</span><span class=n>decode</span><span class=p>()</span> <span class=k>for</span> <span class=n>s</span> <span class=ow>in</span> <span class=n>process</span><span class=o>.</span><span class=n>communicate</span><span class=p>()]</span>
+
+    <span class=n>alert_messages</span> <span class=o>=</span> <span class=p>[]</span>
+
+    <span class=k>if</span> <span class=ow>not</span> <span class=n>check_units</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+        <span class=n>alert_messages</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=s2>&#34;Not all units are OK&#34;</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=ow>not</span> <span class=n>check_disks</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+        <span class=n>alert_messages</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=s2>&#34;Not all disks are OK&#34;</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=ow>not</span> <span class=n>check_battery</span><span class=p>(</span><span class=n>stdout</span><span class=p>):</span>
+        <span class=n>alert_messages</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=s2>&#34;Battery is not OK&#34;</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=n>stderr</span><span class=p>:</span>
+        <span class=n>alert_messages</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;STDERR:</span><span class=se>\n</span><span class=si>{</span><span class=n>stderr</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=n>alert_messages</span><span class=p>:</span>
+        <span class=n>hostname</span> <span class=o>=</span> <span class=n>socket</span><span class=o>.</span><span class=n>gethostbyaddr</span><span class=p>(</span><span class=n>socket</span><span class=o>.</span><span class=n>gethostname</span><span class=p>())[</span><span class=mi>0</span><span class=p>]</span>
+        <span class=n>sender</span> <span class=o>=</span> <span class=s2>&#34;root@&#34;</span> <span class=o>+</span> <span class=n>hostname</span>
+        <span class=n>subject</span> <span class=o>=</span> <span class=s1>&#39;RAID alert!&#39;</span>
+        <span class=n>message</span> <span class=o>=</span> <span class=sa>f</span><span class=s2>&#34;From: &lt;</span><span class=si>{</span><span class=n>sender</span><span class=si>}</span><span class=s2>&gt;</span><span class=se>\n</span><span class=s2>To: </span><span class=si>{</span><span class=n>ALERT_MAIL</span><span class=si>}</span><span class=se>\n</span><span class=s2>Subject: </span><span class=si>{</span><span class=n>subject</span><span class=si>}</span><span class=se>\n</span><span class=s2>&#34;</span>
+        <span class=n>message</span> <span class=o>+=</span> <span class=s2>&#34;</span><span class=se>\n\n</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>join</span><span class=p>(</span><span class=n>alert_messages</span><span class=p>)</span>
+        <span class=n>message</span> <span class=o>+=</span> <span class=sa>f</span><span class=s2>&#34;</span><span class=se>\n\n</span><span class=s2>RAID status:</span><span class=se>\n</span><span class=si>{</span><span class=n>stdout</span><span class=si>}</span><span class=s2>&#34;</span>
+
+        <span class=n>smtplib</span><span class=o>.</span><span class=n>SMTP</span><span class=p>(</span><span class=s1>&#39;localhost&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>sendmail</span><span class=p>(</span><span class=n>sender</span><span class=p>,</span> <span class=n>ALERT_MAIL</span><span class=p>,</span> <span class=n>message</span><span class=p>)</span>
+
+        <span class=n>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</code></pre></div>
+<div id=disqus-container>
+<button id=disqus-button onclick=showComments()>Show comments</button>
+<div id=disqus-comments>
+<div id=disqus_thread>
+</div>
+<script type=application/javascript>function showComments(){var e=function(){},b=document,a=b.createElement('script'),c,d;a.async=!0,a.src='//tamasgal.disqus.com/embed.js',a.setAttribute('data-timestamp',+new Date),(b.head||b.body).appendChild(a),c=document.getElementById('disqus-button'),c.parentNode.removeChild(c),d=document.getElementById('disqus-comments'),d.style.display='block'}</script>
+<noscript>Enable JavaScript to view Disqus comments.</noscript>
+</div>
+</div>
+</main>
+</div>
+<script src=http://tamasgal.com/js/feather.min.js></script>
+<script>feather.replace()</script>
+</body>
+</html>
