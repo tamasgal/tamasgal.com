@@ -37,16 +37,16 @@ pygmentsCodeFences = true
 #    pre = "monitor"
 #    url = "/physics/"
 #    weight = 4
-  [[menu.main]]
-    name = "Tetris"
-    pre = "grid"
-    url = "/tetris/"
-    weight = 4
-  [[menu.main]]
-    name = "Groooo"
-    pre = "circle"
-    url = "/groooo/"
-    weight = 5
+  # [[menu.main]]
+  #   name = "Tetris"
+  #   pre = "grid"
+  #   url = "/tetris/"
+  #   weight = 4
+  # [[menu.main]]
+  #   name = "Groooo"
+  #   pre = "circle"
+  #   url = "/groooo/"
+  #   weight = 5
   [[menu.main]]
     name = "Tags"
     pre = "tag"
