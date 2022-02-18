@@ -1,4 +1,4 @@
-baseurl = "http://tamasgal.com/"
+baseurl = "https://tamasgal.github.io"
 relativeurls = false
 
 languageCode = "en-us"
