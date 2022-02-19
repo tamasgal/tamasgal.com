@@ -1,0 +1,130 @@
+baseURL: http://example.org/
+languageCode: en-us
+title: Tamas Gal
+theme: "PaperMod"
+disqusShortname: tamasgal
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+
+
+languages:
+    en:
+        languageName: "English"
+        weight: 1
+        menu:
+            main:
+                - name: Blog
+                  url: blog
+                  weight: 1
+                - name: Mac
+                  url: mac
+                  weight: 1
+                - name: Modular Synth
+                  url: modular_synth
+                  weight: 1
+                - name: YouTube
+                  url: https://www.youtube.com/c/tamasgal_com
+                  weight: 1
+                - name: Patreon
+                  url: https://www.patreon.com/tamasgal
+                  weight: 1
+                - name: Archive
+                  url: archives
+                  weight: 5
+                - name: Search
+                  url: search/
+                  weight: 10000
+                - name: Tags
+                  url: tags/
+                  weight: 10
+                - name: Categories
+                  url: categories/
+                  weight: 10
+
+permalinks:
+    blog: "/:filename/"
+
+taxonomies:
+    category: categories
+    tag: tags
+    series: series
+
+params:
+    ShowPostNavLinks: true
+    ShowBreadCrumbs: false
+    ShowCodeCopyButtons: true
+    ShowShareButtons: true
+    ShowReadingTime: true
+    ShowToc: true
+    TocOpen: false
+    comments: true
+    custom_css: ["css/custom.css"]
+
+    editPost:
+        URL: "https://github.com/tamasgal/tamasgal.com/tree/main/content"
+        Text: "Suggest Changes" # edit text
+        appendFilePath: true # to append file path to Edit link
+
+    profileMode:
+        enabled: true
+        title: Servus! 🖖
+        subtitle: |
+            My name is Tamás Gál, I am an **astroparticle physicist** and working at Erlangen Centre for Astroparticle Physics ([**ECAP**](https://ecap.nat.fau.de/)).
+
+            I develop online monitoring and live reconstruction algorithms for the [**KM3NeT**](https://www.km3net.org) neutrino telescopes and maintain the IT services of KM3NeT and ECAP. My **DevOps** engineering skills include **Docker** (+Swarm), **GitLab** CI/CD, **Jenkins**, **Xen**, **OpenVZ**, **Ansible** etc. and more than two decades of experience with **Linux** and **BSD** as **system administrator**.
+
+            I spend most of my time with science (astroparticle physics), coding ([**Julia**](https://www.julialang.org), Python, ...) and electronics (both analog/digital, mainly on my DIY modular synthesizer); the rest preferably with traveling around the world with my girlfriend and **motorcycle** tours with Simon and Tris (off-road!). I have an obsession to **repair things** and keep them alive as long as possible, no matter if it's gearbox restoration of my **BMW R1100 GS** or a replacement of a dead 0201 SMD capacitor on a MacBook logicboard.
+
+            Occasionally I publish some content on my [YouTube channel](https://www.youtube.com/c/tamasgal_com), so give it a shot if you are interested in anything mentioned above.
+
+        imageUrl: "img/tamasgal.jpeg"
+        imageTitle: my image
+        imageWidth: 300
+        imageHeight: 300 
+#        buttons:
+#            - name: Blog
+#              url: blog
+#            - name: Mac
+#              url: mac
+#            - name: Archives
+#              url: archives
+#            - name: Tags
+#              url: tags
+
+    homeInfoParams:
+        Title: "PaperMod"
+        Content: >
+            Welcome to demo of hugo's theme PaperMod.
+            - **PaperMod** is a simple but fast and responsive theme with useful feature-set that enhances UX.
+            - Do give a 🌟 on Github !
+            - PaperMod is based on theme [Paper](https://github.com/nanxiaobei/hugo-paper).
+
+    socialIcons: # optional
+        - name: github
+          url: "https://github.com/tamasgal"
+        - name: youtube
+          url: "https://www.youtube.com/c/tamasgal_com"
+        - name: twitter
+          url: "https://twitter.com/tamasgal"
+        - name: "Patreon"
+          url: "https://www.patreon.com/tamasgal"
+
+    fuseOpts:
+        isCaseSensitive: false
+        shouldSort: true
+        location: 0
+        distance: 1_000
+        threshold: 0.4
+        minMatchCharLength: 0
+        keys: [ "title", "permalink", "summary", "content" ]
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON # is necessary
