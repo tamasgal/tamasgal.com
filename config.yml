@@ -1,4 +1,4 @@
-baseURL: http://example.org/
+baseURL: https://www.tamasgal.com
 languageCode: en-us
 title: Tamas Gal
 theme: "PaperMod"
@@ -18,33 +18,33 @@ languages:
         weight: 1
         menu:
             main:
-                - name: Blog
-                  url: blog
-                  weight: 1
-                - name: Mac
-                  url: mac
-                  weight: 1
                 - name: Modular Synth
                   url: modular_synth
                   weight: 1
+                - name: Blog
+                  url: blog
+                  weight: 4
+                - name: maCOS
+                  url: mac
+                  weight: 8
                 - name: YouTube
                   url: https://www.youtube.com/c/tamasgal_com
-                  weight: 1
+                  weight: 10
                 - name: Patreon
                   url: https://www.patreon.com/tamasgal
-                  weight: 1
+                  weight: 20
                 - name: Archive
                   url: archives
-                  weight: 5
+                  weight: 30
+                - name: Categories
+                  url: categories/
+                  weight: 100
+                - name: Tags
+                  url: tags/
+                  weight: 999
                 - name: Search
                   url: search/
                   weight: 10000
-                - name: Tags
-                  url: tags/
-                  weight: 10
-                - name: Categories
-                  url: categories/
-                  weight: 10
 
 permalinks:
     blog: "/:filename/"
