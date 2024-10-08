@@ -24,15 +24,12 @@ languages:
                 - name: Blog
                   url: blog
                   weight: 4
-                - name: maCOS
+                - name: macOS
                   url: mac
                   weight: 8
                 - name: YouTube
                   url: https://www.youtube.com/c/tamasgal_com
                   weight: 10
-                - name: Patreon
-                  url: https://www.patreon.com/tamasgal
-                  weight: 20
                 - name: Archive
                   url: archives
                   weight: 30
