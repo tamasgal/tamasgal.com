@@ -1,7 +1,7 @@
-baseURL: https://www.tamasgal.com
+baseURL: "https://www.tamasgal.com"
 languageCode: en-us
 title: Tamas Gal
-theme: "PaperMod"
+theme: ["PaperMod"]
 disqusShortname: tamasgal
 
 enableInlineShortcodes: true
@@ -18,7 +18,7 @@ languages:
         weight: 1
         menu:
             main:
-                - name: Modular Synth
+                - name: Modular Synths
                   url: modular_synth
                   weight: 1
                 - name: Blog
