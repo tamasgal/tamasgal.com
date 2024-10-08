@@ -1,3 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>multiple on Tamas Gal</title><link>https://www.tamasgal.com/tags/multiple/</link><description>Recent content in multiple on Tamas Gal</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 19 Feb 2022 20:58:06 +0100</lastBuildDate><atom:link href="https://www.tamasgal.com/tags/multiple/index.xml" rel="self" type="application/rss+xml"/><item><title>Buffered multiple 4x3</title><link>https://www.tamasgal.com/modular_synth/buffered_multiple_4x3/</link><pubDate>Sat, 19 Feb 2022 20:58:06 +0100</pubDate><guid>https://www.tamasgal.com/modular_synth/buffered_multiple_4x3/</guid><description>Abstract A simple 4x3 buffered multiple which can easily be fit on a 46x16 stripboard. The schematics are based on the 1161 Buffered Multiple from Sam Battle (aka LOOK MUM NO COMPUTER).
-Introduction Alright, this is a very simple yet absolutely essential module in a modular synth: the buffered multiple.
-Why is it called multiple? Because it&amp;rsquo;s makes multiple signals out of one by replicating it. What does buffered mean? In contrast to a passive multiple which is basically a cable distributor, a buffered multiple not only replicates the signal on each of its outputs, it also buffers them in the sense that it decouples it from the original current source.</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Multiple on Tamas Gal</title><link>https://www.tamasgal.com/tags/multiple/</link><description>Recent content in Multiple on Tamas Gal</description><generator>Hugo -- 0.135.0</generator><language>en</language><lastBuildDate>Sat, 19 Feb 2022 20:58:06 +0100</lastBuildDate><atom:link href="https://www.tamasgal.com/tags/multiple/index.xml" rel="self" type="application/rss+xml"/><item><title>Buffered multiple 4x3</title><link>https://www.tamasgal.com/modular_synth/buffered_multiple_4x3/</link><pubDate>Sat, 19 Feb 2022 20:58:06 +0100</pubDate><guid>https://www.tamasgal.com/modular_synth/buffered_multiple_4x3/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>A simple 4x3 buffered multiple which can easily be fit on a &lt;code>46x16&lt;/code> stripboard.
+The schematics are based on the &lt;a href="https://www.lookmumnocomputer.com/projects#/1161-buffered-multiple">1161 Buffered
+Multiple&lt;/a>
+from Sam Battle (&lt;em>aka&lt;/em> LOOK MUM NO COMPUTER).&lt;/p>
+&lt;h2 id="introduction">Introduction&lt;/h2>
+&lt;p>Alright, this is a very simple yet absolutely essential module in a modular
+synth: the buffered multiple.&lt;/p>
+&lt;p>Why is it called &lt;em>multiple&lt;/em>? Because it&amp;rsquo;s makes &lt;em>multiple&lt;/em> signals out of one by
+replicating it. What does &lt;em>buffered&lt;/em> mean? In contrast to a passive multiple
+which is basically a cable distributor, a buffered multiple not only replicates
+the signal on each of its outputs, it also &lt;em>buffers&lt;/em> them in the sense that it
+decouples it from the original current source. This essentially means that you
+can feed in a high impedance signal (which effectively means its voltage would
+collapse when it&amp;rsquo;s drained too hard) and you get a low impedance one.&lt;/p></description></item></channel></rss>
