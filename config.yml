@@ -61,6 +61,7 @@ params:
     TocOpen: false
     comments: true
     custom_css: ["css/custom.css"]
+    social: true
 
     editPost:
         URL: "https://github.com/tamasgal/tamasgal.com/tree/main/content"
