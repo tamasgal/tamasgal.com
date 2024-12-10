@@ -6,6 +6,8 @@ draft: false
 
 I am a big fan of the game K240 which I played a lot with my step brother back in the 90ies on an Amiga Commodore 500. There is a standalone application for macOS provided by "Games Nostalgia" which bundles the game and the Amiga emulator FS-UAE and works out of the box.
 
+![Screenshot of the K240 game by Gremlin Graphics for Amiga](K240.png)
+
 Unfortunately, on my new M1 MacBook it did not start up correctly, instead I got a very generic "Killed: 9" error:
 
     /Applications/K240.app/Contents/Resources/script: line 25: 13832 Killed: 9               ./MacOS/fs-uae ./Resources/Default.fs-uae 1 > /dev/null
